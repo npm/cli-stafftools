@@ -21,6 +21,7 @@ gh graphql add-template-oss
 gh graphql clone
 gh graphql comment
 gh graphql delete-branches
+gh graphql enable-lint-feature
 gh graphql merge
 gh graphql metrics
 gh graphql pr-engines
@@ -53,6 +54,7 @@ gh repos
 gh repos add-template-oss
 gh repos clone
 gh repos delete-branches
+gh repos enable-lint-feature
 gh repos metrics
 gh repos publish-repo
 gh repos pull
@@ -386,6 +388,7 @@ Commands:
   npx -p @npmcli/stafftools gh graphql clone                   Clone repos into a directory
   npx -p @npmcli/stafftools gh graphql comment                 Comment on pull requests
   npx -p @npmcli/stafftools gh graphql delete-branches         Delete branches of repos with no remote counterpart
+  npx -p @npmcli/stafftools gh graphql enable-lint-feature     Enable lint feature like prettier
   npx -p @npmcli/stafftools gh graphql merge                   Merge pull requests
   npx -p @npmcli/stafftools gh graphql pr-engines              Get engine changes in a pull request
   npx -p @npmcli/stafftools gh graphql publish-release         Merge pending release PRs and publish the resulting release
@@ -519,6 +522,44 @@ Command Options:
       --remote  name of the remote  [required] [default: "origin"]
       --force   force sync the repo, this will overwrite any local changes!  [boolean] [default: false]
       --sync    whether to sync the repo  [boolean] [default: true]
+
+Global Options:
+  -c, --cwd       base directory to run filesystem related commands  [string] [default: "$HOME/projects"]
+  -l, --limit     number of worker threads to spawn  [number] [default: $NUM_CORES]
+  -f, --filter    filters to be parsed as relaxed json and applied to the data  [array]
+  -r, --reject    rejectors to be parsed as relaxed json and applied to the data  [array]
+      --clean     whether to rimraf the cwd first  [boolean] [default: false]
+      --template  how to format the final output  [string] [required] [choices: "json", "silent", "report"] [default: "report"]
+      --sort      key to sort results by  [string] [default: "id"]
+      --json      shorthand for --template=json  [boolean] [default: false]
+      --silent    shorthand for --template=silent  [boolean] [default: false]
+
+Other Options:
+      --help     Show help  [boolean]
+      --version  Show version number  [boolean]
+      --config   Path to JSON config file
+`
+
+exports[`test/gh.mjs TAP all commands help graphql enable-lint-feature > must match snapshot 1`] = `
+npx -p @npmcli/stafftools gh graphql enable-lint-feature
+
+Enable lint feature like prettier
+
+Command Options:
+      --query                 path to a query file passed directly to gh api graphql  [string] [required]
+      --cache                 how long for gh to cache the query  [string] [default: "1m"]
+      --report                shorthand for --template=report  [boolean] [default: false]
+      --remote                name of the remote  [required] [default: "origin"]
+      --force                 delete existing branch  [boolean] [default: false]
+      --sync                  whether to sync the repo  [boolean] [default: true]
+      --configName            template-oss config setting name  [string] [default: "prettier"]
+      --templateOSSRange      required template-oss version range  [string] [default: ">=4.23.0"]
+      --lintFixCommitMessage  lintfix commit message  [string] [default: "chore: run prettier"]
+      --prBody                PR body  [string] [default: "Enable and run prettier"]
+      --branchName            branch name to use  [string] [default: "stafftools/enable-prettier"]
+      --devDependencies       devDependencies to install  [array] [default: ["prettier@*","eslint-config-prettier@*"]]
+      --exactDevDependencies  devDependencies to install with --save-exact  [array] [default: ["@github/prettier-config@0.0.6"]]
+      --install               install deps  [boolean] [default: false]
 
 Global Options:
   -c, --cwd       base directory to run filesystem related commands  [string] [default: "$HOME/projects"]
@@ -1398,13 +1439,14 @@ npx -p @npmcli/stafftools gh repos
 Fetch repos
 
 Commands:
-  npx -p @npmcli/stafftools gh repos add-template-oss  Add template-oss to a repo
-  npx -p @npmcli/stafftools gh repos clone             Clone repos into a directory
-  npx -p @npmcli/stafftools gh repos delete-branches   Delete branches of repos with no remote counterpart
-  npx -p @npmcli/stafftools gh repos publish-repo      Publish repos from their default branch
-  npx -p @npmcli/stafftools gh repos pull              Checkout and pull default branch of repos
-  npx -p @npmcli/stafftools gh repos repo-settings     Set common settings on all repos
-  npx -p @npmcli/stafftools gh repos set-secret        Set Publish Tokens
+  npx -p @npmcli/stafftools gh repos add-template-oss     Add template-oss to a repo
+  npx -p @npmcli/stafftools gh repos clone                Clone repos into a directory
+  npx -p @npmcli/stafftools gh repos delete-branches      Delete branches of repos with no remote counterpart
+  npx -p @npmcli/stafftools gh repos enable-lint-feature  Enable lint feature like prettier
+  npx -p @npmcli/stafftools gh repos publish-repo         Publish repos from their default branch
+  npx -p @npmcli/stafftools gh repos pull                 Checkout and pull default branch of repos
+  npx -p @npmcli/stafftools gh repos repo-settings        Set common settings on all repos
+  npx -p @npmcli/stafftools gh repos set-secret           Set Publish Tokens
 
 Command Options:
       --cache    how long for gh to cache the query  [string] [default: "1h"]
@@ -1508,6 +1550,46 @@ Command Options:
       --remote   name of the remote  [required] [default: "origin"]
       --force    force sync the repo, this will overwrite any local changes!  [boolean] [default: false]
       --sync     whether to sync the repo  [boolean] [default: true]
+
+Global Options:
+  -c, --cwd       base directory to run filesystem related commands  [string] [default: "$HOME/projects"]
+  -l, --limit     number of worker threads to spawn  [number] [default: $NUM_CORES]
+  -f, --filter    filters to be parsed as relaxed json and applied to the data  [array]
+  -r, --reject    rejectors to be parsed as relaxed json and applied to the data  [array]
+      --clean     whether to rimraf the cwd first  [boolean] [default: false]
+      --template  how to format the final output  [string] [required] [choices: "json", "silent", "table", "confirm", "report"] [default: "report"]
+      --sort      key to sort results by  [string] [default: "id"]
+      --json      shorthand for --template=json  [boolean] [default: false]
+      --silent    shorthand for --template=silent  [boolean] [default: false]
+
+Other Options:
+      --help     Show help  [boolean]
+      --version  Show version number  [boolean]
+      --config   Path to JSON config file
+`
+
+exports[`test/gh.mjs TAP all commands help repos enable-lint-feature > must match snapshot 1`] = `
+npx -p @npmcli/stafftools gh repos enable-lint-feature
+
+Enable lint feature like prettier
+
+Command Options:
+      --cache                 how long for gh to cache the query  [string] [default: "1h"]
+      --repos                 query to filter repos  [string] [required] [default: "org:npm topic:npm-cli fork:true archived:false"]
+      --table                 shorthand for --template=table  [boolean] [default: false]
+      --confirm               shorthand for --template=confirm  [boolean] [default: false]
+      --report                shorthand for --template=report  [boolean] [default: false]
+      --remote                name of the remote  [required] [default: "origin"]
+      --force                 delete existing branch  [boolean] [default: false]
+      --sync                  whether to sync the repo  [boolean] [default: true]
+      --configName            template-oss config setting name  [string] [default: "prettier"]
+      --templateOSSRange      required template-oss version range  [string] [default: ">=4.23.0"]
+      --lintFixCommitMessage  lintfix commit message  [string] [default: "chore: run prettier"]
+      --prBody                PR body  [string] [default: "Enable and run prettier"]
+      --branchName            branch name to use  [string] [default: "stafftools/enable-prettier"]
+      --devDependencies       devDependencies to install  [array] [default: ["prettier@*","eslint-config-prettier@*"]]
+      --exactDevDependencies  devDependencies to install with --save-exact  [array] [default: ["@github/prettier-config@0.0.6"]]
+      --install               install deps  [boolean] [default: false]
 
 Global Options:
   -c, --cwd       base directory to run filesystem related commands  [string] [default: "$HOME/projects"]
